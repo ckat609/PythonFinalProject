@@ -1,0 +1,27 @@
+* {
+    /* background-color: red; */
+    /* outline: 0px solid red; */
+}
+
+.wrapper {
+    width: 970px;
+    margin: 0 auto;
+}
+
+.show-poster {
+    width: 250px;
+}
+
+.network-logo {
+    height: 25px;
+}
+
+.show-info {
+    vertical-align: top;
+    display: inline-block;
+    padding: 0 10px;
+}
+
+.messages {
+    color: red;
+}
