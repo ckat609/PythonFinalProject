@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+        crossorigin="anonymous">
+
+
+    <title>Semi-Restful TV Shows: Add show</title>
+</head>
+
+<body>
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="/shows/list">TV Shows</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/shows/add">Add show</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/shows/list">Shows list<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/shows/network/add">Add network</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/shows/network/list">Network list</a>
+                    </li>
+                </ul>
+            </div>
+
+            {% if request.session.logged_in %}
+            <a href="/user/logout">LOGOUT</a>
+            {% endif %}
+        </nav>
+
+
+        <h1>Add a new show</h1>
+        {% if messages %}
+        <div class="row">
+            <ul class="messages">
+                {% for message in messages %}
+                <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        <form action="/shows/add/create" method="post">
+            {% csrf_token %}
+            <div class="form-group row">
+                <div class="col">
+                    <label for="show-title">Title</label>
+                    <input type="text" class="form-control" id="show-title" name="title" {% if title %}value="{{title}}" {% endif %}>
+                </div>
+                <div class=" col">
+                    <label for="show-image">Image URL</label>
+                    <input type="text" class="form-control" id="show-image" name="image" {% if image %}value="{{image}}" {% endif %}>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col">
+                    <label for="show-network">Network</label>
+                    <select class="form-control" id="show-network" name="network">
+                        {% for network in networks %}
+                        <option {% if network.id == networkSelected %} selected="selected" {% endif %} value="{{network.id}}">{{network.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col">
+                    <label for="show-release-date">Release date</label>
+                    <input type="date" class="form-control" id="show-release-date" name="release_date" value="{% if release_date %}{{release_date}}{% else %}{{default_date}}{% endif %}">
+                </div>
+            </div>
+            <div class=" form-group">
+                <label for="show-description">Description</label>
+                <textarea type="text" class="form-control" id="show-description" name="description">{% if description %}{{description}}{% endif %}</textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Create</button>
+
+        </form>
+    </div>
+</body>
+
+</html>

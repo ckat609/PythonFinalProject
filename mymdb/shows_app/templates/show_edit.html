@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+        crossorigin="anonymous">
+
+
+    <title>Semi-Restful TV Shows: {{show.title}}</title>
+</head>
+
+<body>
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="/shows/list">TV Shows</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/shows/add">Add show</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/shows/list">Shows list<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/shows/network/add">Add network</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/shows/network/list">Network list</a>
+                    </li>
+                </ul>
+            </div>
+
+            {% if request.session.logged_in %}
+            <a href="/user/logout">LOGOUT</a>
+            {% endif %}
+        </nav>
+
+
+        <h1>Edit: {{show.title}}</h1>
+        {% if messages %}
+        <div class="row">
+            <ul class="messages">
+                {% for message in messages %}
+                <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        <form action="/shows/edit/update" method="post">
+            {% csrf_token %}
+            <div class="form-group row">
+                <div class="col">
+                    <label for="show-title">Title</label>
+                    <input type="text" class="form-control" id="show-title" name="title" value="{% if title %}{{title}}{% else %}{{show.title}}{% endif %}">
+                    <input type="hidden" name="id" value="{% if id %}{{id}}{% else %}{{show.id}}{% endif %}">
+                </div>
+                <h1>ID:{{id}}</h1>
+                <div class="col">
+                    <label for="show-image">Image URL</label>
+                    <input type="text" class="form-control" id="show-image" name="image" value="{% if image %}{{image}}{% else %}{{show.image}}{% endif %}">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col">
+                    <label for="show-network">Network</label>
+                    <select class="form-control" id="show-network" name="network">
+                        {% for network in networks %}
+                        <option value="{{network.id}}" {% if network.id == show.network.id or network.id == networkSelected %}selected="selected" {% endif %}>{{network.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col">
+                    <label for="show-release-date">Release date</label>
+                    <input type="date" class="form-control" id="show-release-date" name="release_date" value="{% if release_date %}{{release_date}}{% else %}{{date}}{% endif %}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="show-description">Description</label>
+                <textarea type="text" class="form-control" id="show-description" name="description">{% if description %}{{description}}{% else %} {{show.description}}{% endif %}</textarea>
+            </div>
+            <a href="/shows/view/{{show.id}}"><button type="button" class="btn btn-primary">View</button></a>
+            <button type="submit" class="btn btn-primary">Update</button>
+            <a href="/shows/list"><button type="button" class="btn btn-primary">Cancel</button></a>
+
+        </form>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,26 @@
+* {
+    /* outline: 1px dotted yellow; */
+    /* background-color: red; */
+}
+
+.messages {
+    color: red;
+}
+
+.img-welcome {
+    width: 300px;
+}
+
+
+.quotes {
+    font-style: oblique;
+}
+
+.danger {
+    color: red;
+}
+
+
+.btn-width {
+    width: 150px;
+}

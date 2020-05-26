@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+        crossorigin="anonymous">
+
+
+    <title>Semi-Restful TV Shows: List of all shows</title>
+</head>
+
+<body>
+    <div class="container" style="vertical-align: top;">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="/shows/list">TV Shows</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/shows/add">Add show</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/shows/list">Shows list<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/shows/network/add">Add network</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/shows/network/list">Network list</a>
+                    </li>
+                </ul>
+            </div>
+
+            {% if request.session.logged_in %}
+            <a href="/user/logout">LOGOUT</a>
+            {% endif %}
+        </nav>
+
+        <table class="table table-striped table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for show in shows %}
+                <tr>
+                    <td>{{show.id}}</td>
+                    <td>{{show.title}}</td>
+                    <td>
+                        <a href="/shows/view/{{show.id}}">View</a> |
+                        <a href="/shows/edit/{{show.id}}">Edit</a> |
+                        <a href="/shows/delete/{{show.id}}">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>

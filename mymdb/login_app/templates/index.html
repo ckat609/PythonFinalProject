@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/login_style.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+        crossorigin="anonymous">
+    <title>Login and Resgistration</title>
+</head>
+
+<body>
+    <div class="container wrapper">
+        <div class="row">
+            <div class="col">
+                <h1>Register</h1>
+                {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                    <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                <form action="/user/reg" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="first_name">First name:</label>
+                        <input type="text" class="form-control" name="first_name" id="first_name" {% if first_name %}value="{{first_name}}" {% endif%}>
+                    </div>
+                    <div class="form-group">
+                        <label for="last_name">Last name:</label>
+                        <input type="text" class="form-control" name="last_name" id="last_name" {% if last_name %}value="{{last_name}}" {% endif%}>
+                    </div>
+                    <div class="form-group">
+                        <label for="birthday">Birthday:</label>
+                        <input type="date" class="form-control" name="birthday" id="birthday" value="{% if birthday %}{{birthday}}{% else %}{{default_date}}{% endif%}">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" class="form-control" name="email" id="email" {% if email %}value="{{email}}" {% endif%}>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input type="password" class="form-control" name="password" id="password">
+                    </div>
+                    <div class="form-group">
+                        <label for="password_confirm">Confirm password:</label>
+                        <input type="password" class="form-control" name="password_confirm" id="password_confirm">
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Register</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col">
+                <h1>Login</h1>
+                <form action="/user/login" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" class="form-control" name="email" id="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Password:</label>
+                        <input type="password" class="form-control" name="password" id="password">
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
