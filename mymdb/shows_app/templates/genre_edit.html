@@ -11,7 +11,7 @@
         crossorigin="anonymous">
 
 
-    <title>Semi-Restful TV Shows: Add network</title>
+    <title>Semi-Restful TV Shows: {{genre.title}}</title>
 </head>
 
 <body>
@@ -23,7 +23,7 @@
         </div>
 
 
-        <h1>Add a new network</h1>
+        <h1>Edit: {{genre.title}}</h1>
         {% if messages %}
         <div class="row">
             <ul class="messages">
@@ -33,19 +33,17 @@
             </ul>
         </div>
         {% endif %}
-        <form action="add/create" method="post">
+        <form action="/shows/genre/edit/update" method="post">
             {% csrf_token %}
             <div class="form-group row">
                 <div class="col">
-                    <label for="show-title">Name</label>
-                    <input type="text" class="form-control" id="show-title" name="title" {% if name %}value="{{name}}" {% endif %}>
-                </div>
-                <div class=" col">
-                    <label for="show-image">Logo image URL</label>
-                    <input type="text" class="form-control" id="show-image" name="image" {% if image %}value="{{image}}" {% endif %}>
+                    <label for="genre-name">Name</label>
+                    <input type="text" class="form-control" id="genre-name" name="name" value="{% if name %}{{name}}{% else %}{{genre.name}}{% endif %}">
+                    <input type="hidden" name="id" value="{% if id %}{{id}}{% else %}{{genre.id}}{% endif %}">
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary">Create</button>
+            <button type="submit" class="btn btn-primary">Update</button>
+            <a href="/shows/genre/list"><button type="button" class="btn btn-primary">Cancel</button></a>
 
         </form>
     </div>

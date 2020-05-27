@@ -11,7 +11,7 @@
         crossorigin="anonymous">
 
 
-    <title>Semi-Restful TV Shows: Add network</title>
+    <title>Semi-Restful TV Shows: Add genre</title>
 </head>
 
 <body>
@@ -22,8 +22,7 @@
             {%endif%}
         </div>
 
-
-        <h1>Add a new network</h1>
+        <h1>Add a new genre</h1>
         {% if messages %}
         <div class="row">
             <ul class="messages">
@@ -35,14 +34,10 @@
         {% endif %}
         <form action="add/create" method="post">
             {% csrf_token %}
-            <div class="form-group row">
+            <div class="form-group row w-25">
                 <div class="col">
-                    <label for="show-title">Name</label>
-                    <input type="text" class="form-control" id="show-title" name="title" {% if name %}value="{{name}}" {% endif %}>
-                </div>
-                <div class=" col">
-                    <label for="show-image">Logo image URL</label>
-                    <input type="text" class="form-control" id="show-image" name="image" {% if image %}value="{{image}}" {% endif %}>
+                    <label for="genre">Genre</label>
+                    <input type="text" class="form-control" id="genre" name="genre" {% if genre %}value="{{genre}}" {% endif %}>
                 </div>
             </div>
             <button type="submit" class="btn btn-primary">Create</button>

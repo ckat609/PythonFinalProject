@@ -17,34 +17,11 @@
 
 <body>
     <div class="container" style="vertical-align: top;">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="/shows/list">TV Shows</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/shows/add">Add show</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/shows/list">Shows list<span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/shows/network/add">Add network</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/shows/network/list">Network list</a>
-                    </li>
-                </ul>
-            </div>
-
-            {% if request.session.logged_in %}
-            <a href="/user/logout">LOGOUT</a>
-            {% endif %}
-        </nav>
+        <div id="js_navmenu">
+            {%if request.session.logged_in%}
+            <a href='/user/logout'>LOGOUT</a>
+            {%endif%}
+        </div>
 
         <div class="jumbotron">
             <table>
@@ -57,8 +34,9 @@
                     <td class="show-info">
                         <div>
                             <h1>{{show.title}}</h1>
-                            <h5>ID: {{show.id}}</h5>
-                            <h5>Network: <img class=network-logo src="{{show.network.image}}" </h5> <h5>Release date: {{show.release_date}}</h5>
+                            <h5>Network: {{show.network.name}} </h5>
+                            <h5>Release date: {{show.release_date}}</h5>
+                            <h5>Genres: THIS IS A PLACEHOLDER</h5>
                             <p>{{show.description}}</p>
                             <hr>
                             <h6>Last updated on {{show.modified_at}} by {{show.user.first_name}} {{show.user.last_name}}</h6>
@@ -66,6 +44,7 @@
                         {% if request.session.logged_in %}
                         <div>
                             <a href="/shows/edit/{{show.id}}" class="btn btn-primary">Edit</a>
+                            <a href="/shows/review/add/{{show.id}}" class="btn btn-primary">Review</a>
                             <a href="/shows/delete/{{show.id}}" class="btn btn-danger float-right">DELETE</a>
                         </div>
                         {%endif%}
@@ -73,7 +52,9 @@
                 </tr>
             </table>
         </div>
+        <div id="reviews"></div>
     </div>
 </body>
+<script src="{% static 'js/header.js' %}"></script>
 
 </html>

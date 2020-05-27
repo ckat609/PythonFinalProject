@@ -16,34 +16,11 @@
 
 <body>
     <div class="container">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="/shows/list">TV Shows</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/shows/add">Add show</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/shows/list">Shows list<span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/shows/network/add">Add network</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/shows/network/list">Network list</a>
-                    </li>
-                </ul>
-            </div>
-
-            {% if request.session.logged_in %}
-            <a href="/user/logout">LOGOUT</a>
-            {% endif %}
-        </nav>
+        <div id="js_navmenu">
+            {%if request.session.logged_in%}
+            <a href='/user/logout'>LOGOUT</a>
+            {%endif%}
+        </div>
 
 
         <h1>Edit: {{network.title}}</h1>
@@ -76,5 +53,6 @@
         </form>
     </div>
 </body>
+<script src="{% static 'js/header.js' %}"></script>
 
 </html>

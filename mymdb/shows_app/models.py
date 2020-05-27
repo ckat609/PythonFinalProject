@@ -29,6 +29,16 @@ class NetworkManager(models.Manager):
         return errors
 
 
+class GenreManager(models.Manager):
+    def basicValidator(self, postData):
+        errors = {}
+
+        if(len(postData['genre']) == 0):
+            errors['genre'] = "Genre name must contain at least one character."
+
+        return errors
+
+
 class Network(models.Model):
     user = models.ForeignKey(User, related_name="network", on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=255)
@@ -38,10 +48,23 @@ class Network(models.Model):
     objects = NetworkManager()
 
 
+class Genre(models.Model):
+    user = models.ForeignKey(User, related_name="genres", on_delete=models.CASCADE, null=True)
+    name = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now_add=True)
+    objects = GenreManager()
+
+
 class Show(models.Model):
-    user = models.ForeignKey(User, related_name="show", on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(User, related_name="shows", on_delete=models.CASCADE, null=True)
     title = models.CharField(max_length=255)
-    release_date = models.DateField()
+    medium = models.CharField(max_length=45, null=True)
+    genre = models.ManyToManyField(Genre, related_name="shows")
+    total_seasons = models.IntegerField(null=True)
+    total_episodes = models.IntegerField(null=True)
+    runtime = models.IntegerField(null=True)
+    release_date = models.DateField(null=True)
     description = models.TextField(null=True)
     image = models.TextField(null=True)
     network = models.ForeignKey(Network, related_name="shows", on_delete=models.CASCADE, null=True)
@@ -50,14 +73,14 @@ class Show(models.Model):
     objects = ShowManager()
 
 
-# class Review(models.Model):
-#     reviewer = models.ForeignKey(User, related_name="rev")
-#     show = models.ForeignKey(Show, related_name="review", on_delete=models.CASCADE, null=True)
-#     title = models.CharField(max_length=255)
-#     score = models.IntegerField(ma)
-#     content = models.TextField()
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     modified_at = models.DateTimeField(auto_now_add=True)
+class Review(models.Model):
+    user = models.ForeignKey(User, related_name="reviews", on_delete=models.CASCADE, null=True)
+    show = models.ForeignKey(Show, related_name="reviews", on_delete=models.CASCADE, null=True)
+    title = models.CharField(max_length=255)
+    score = models.IntegerField()
+    review = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now_add=True)
 
 
 # class Comment(models.Model):

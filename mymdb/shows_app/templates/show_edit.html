@@ -16,37 +16,12 @@
 
 <body>
     <div class="container">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="/shows/list">TV Shows</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+        <div id="js_navmenu">
+            {%if request.session.logged_in%}
+            <a href='/user/logout'>LOGOUT</a>
+            {%endif%}
+        </div>
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/shows/add">Add show</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/shows/list">Shows list<span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/shows/network/add">Add network</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/shows/network/list">Network list</a>
-                    </li>
-                </ul>
-            </div>
-
-            {% if request.session.logged_in %}
-            <a href="/user/logout">LOGOUT</a>
-            {% endif %}
-        </nav>
-
-
-        <h1>Edit: {{show.title}}</h1>
         {% if messages %}
         <div class="row">
             <ul class="messages">
@@ -60,14 +35,46 @@
             {% csrf_token %}
             <div class="form-group row">
                 <div class="col">
+                    <h1>Edit: {{show.title}}</h1>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col">
+                    <input type="radio" name="medium" value="movie" required> Movie
+                    <input type="radio" name="medium" value="show" required> Show
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col">
                     <label for="show-title">Title</label>
                     <input type="text" class="form-control" id="show-title" name="title" value="{% if title %}{{title}}{% else %}{{show.title}}{% endif %}">
                     <input type="hidden" name="id" value="{% if id %}{{id}}{% else %}{{show.id}}{% endif %}">
                 </div>
-                <h1>ID:{{id}}</h1>
                 <div class="col">
                     <label for="show-image">Image URL</label>
                     <input type="text" class="form-control" id="show-image" name="image" value="{% if image %}{{image}}{% else %}{{show.image}}{% endif %}">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col">
+                    <label for="show-network">Genre</label>
+                    <select class="form-control" id="genre" name="genre">
+                        {% for network in networks %}
+                        <option {% if network.id == networkSelected %} selected="selected" {% endif %} value="{{network.id}}">{{network.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class=" col">
+                    <label for="runtime">Runtime</label>
+                    <input type="text" class="form-control" id="runtime" name="runtime" {% if runtime %}value="{{runtime}}" {% endif %}>
+                </div>
+                <div class=" col">
+                    <label for="seasons">Seasons</label>
+                    <input type="text" class="form-control" id="seasons" name="seasons" {% if seasons %}value="{{seasons}}" {% endif %}>
+                </div>
+                <div class=" col">
+                    <label for="episodes">Episodes</label>
+                    <input type="text" class="form-control" id="episodes" name="episodes" {% if episodes %}value="{{episodes}}" {% endif %}>
                 </div>
             </div>
             <div class="form-group row">
@@ -95,5 +102,6 @@
         </form>
     </div>
 </body>
+<script src="{% static 'js/header.js' %}"></script>
 
 </html>
