@@ -17,4 +17,11 @@ urlpatterns = [
     path('network/edit/<int:network_num>', views.network_edit),
     path('network/edit/update', views.network_edit_db),
     path('network/delete/<int:network_num>', views.network_delete_db),
+    path('genre/add', views.genre_add),
+    path('genre/list', views.genre_list),
+    path('genre/add/create', views.genre_add_db),
+    path('genre/edit/<int:genre_num>', views.genre_edit),
+    path('genre/edit/update', views.genre_edit_db),
+    path('genre/delete/<int:genre_num>', views.genre_delete_db),
+    path('review/add/<int:show_num', views.review_add),
 ]

@@ -1,0 +1,23 @@
+movie/show
+----------
+genre
+runtime
+seasons
+total_episodes
+favorite movie
+
+
+review
+-------
+text
+user_id
+rating
+
+
+network profile
+---------------
+show all show/movie 
+
+
+*following
+*watchlist
