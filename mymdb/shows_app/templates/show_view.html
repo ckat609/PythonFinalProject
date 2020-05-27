@@ -26,7 +26,7 @@
         <div class="jumbotron">
             <table>
                 <tr>
-                    <td>
+                    <td class="align-top">
                         <div class="">
                             <img src="{{show.image}}" class="show-poster" alt="poster-img">
                         </div>
@@ -34,9 +34,31 @@
                     <td class="show-info">
                         <div>
                             <h1>{{show.title}}</h1>
-                            <h5>Network: {{show.network.name}} </h5>
+                            <div class="form-group row mb-0 text-muted">
+                                <div class="col">
+                                    <h6>Runtime: {{show.runtime}}mins</h6>
+                                </div>
+                                {% if show.medium == 'Show' %}
+                                <div class="col">
+                                    <h6>Seasons: {{show.total_seasons}}</h6>
+                                </div>
+                                <div class="col">
+                                    <h6>Episodes: {{show.total_episodes}}</h6>
+                                </div>
+                                {% endif %}
+                                <div class="col">
+                                </div>
+                            </div>
+                            <h5>{% if show.medium == 'Show' %}Network{%else%}Studio{%endif%}: {{show.network.name}} </h5>
                             <h5>Release date: {{show.release_date}}</h5>
-                            <h5>Genres: THIS IS A PLACEHOLDER</h5>
+                            <h5>Genres:
+                                {% with count=1 %}
+                                {% for genre in show.genre.all|dictsort:'name'  %}
+                                {{genre.name}}
+                                {% if forloop.counter < show.genre.count %},{% endif %}
+                                {% endfor %}
+                                {% endwith %}
+                            </h5>
                             <p>{{show.description}}</p>
                             <hr>
                             <h6>Last updated on {{show.modified_at}} by {{show.user.first_name}} {{show.user.last_name}}</h6>
@@ -44,7 +66,8 @@
                         {% if request.session.logged_in %}
                         <div>
                             <a href="/shows/edit/{{show.id}}" class="btn btn-primary">Edit</a>
-                            <a href="/shows/review/add/{{show.id}}" class="btn btn-primary">Review</a>
+                            <span onclick="showAddReview()" class="btn btn-primary">Add Review</span>
+                            <a href="/shows/watchlist/add/{{show.id}}" class="btn btn-primary">Add to Watchlist</a>
                             <a href="/shows/delete/{{show.id}}" class="btn btn-danger float-right">DELETE</a>
                         </div>
                         {%endif%}
@@ -52,9 +75,19 @@
                 </tr>
             </table>
         </div>
-        <div id="reviews"></div>
+        <input type="hidden" name="show_id" value="{{show.id}}">
+        {% if request.session.logged_in %}
+        <div id="add_review">
+            {% csrf_token %}
+        </div>
+        {%endif%}
+        <div id="view_review">
+            <div class="form-group">
+            </div>
+        </div>
     </div>
 </body>
 <script src="{% static 'js/header.js' %}"></script>
+<script src="{% static 'js/review.js' %}"></script>
 
 </html>

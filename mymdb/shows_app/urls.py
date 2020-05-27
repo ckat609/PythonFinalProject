@@ -23,5 +23,8 @@ urlpatterns = [
     path('genre/edit/<int:genre_num>', views.genre_edit),
     path('genre/edit/update', views.genre_edit_db),
     path('genre/delete/<int:genre_num>', views.genre_delete_db),
-    path('review/add/<int:show_num', views.review_add),
+    path('review/add', views.review_add_db),
+    path('watchlist/view', views.watchlist_view),
+    path('watchlist/add/<int:show_num>', views.watchlist_add),
+    path('watchlist/remove/<int:show_num>', views.watchlist_remove),
 ]

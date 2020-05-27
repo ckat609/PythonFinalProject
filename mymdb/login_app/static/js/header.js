@@ -11,19 +11,19 @@ document.getElementById('js_navmenu').innerHTML = `
         <div class='collapse navbar-collapse' id='navbarSupportedContent'>
             <ul class='navbar-nav'>
                 <li class='nav-item'>
-                    <a class='nav-link' href='/shows/add'>Add movie/show</a>
+                    <a class='nav-link' href='/shows/add'>Add Title</a>
                 </li>
                 <li class='nav-item'>
-                    <a class='nav-link' href='/shows/list'>Shows list<span class='sr-only'>(current)</span></a>
+                    <a class='nav-link' href='/shows/list'>Movie/Shows List<span class='sr-only'>(current)</span></a>
                 </li>
                 <li class='nav-item'>
-                    <a class='nav-link' href='/shows/network/add'>Add network</a>
+                    <a class='nav-link' href='/shows/network/add'>Add Network</a>
                 </li>
                 <li class='nav-item'>
                     <a class='nav-link' href='/shows/network/list'>Network list</a>
                 </li>
                 <li class='nav-item'>
-                    <a class='nav-link' href='/shows/genre/add'>Add genre</a>
+                    <a class='nav-link' href='/shows/genre/add'>Add Genre</a>
                 </li>
                 <li class='nav-item'>
                     <a class='nav-link' href='/shows/genre/list'>Genre list</a>
