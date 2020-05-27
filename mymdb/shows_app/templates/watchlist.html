@@ -11,7 +11,7 @@
         crossorigin="anonymous">
 
 
-    <title>Semi-Restful TV Shows: List of all shows</title>
+    <title>Semi-Restful TV Shows: User Watchlist</title>
 </head>
 
 <body>
@@ -21,7 +21,7 @@
             <a href='/user/logout'>LOGOUT</a>
             {%endif%}
         </div>
-
+        <h1 class="display-4">{{ this_user.first_name }}'s Watchlist</h1>
         <table class="table table-striped table-hover">
             <thead class="thead-dark">
                 <tr>
@@ -34,7 +34,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for show in shows %}
+                {% for show in watchlist %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
                     <td>{{show.title}}</td>
@@ -49,9 +49,10 @@
                     </td>
                     <td>{{show.runtime}}</td>
                     <td>
-                        <a href="/shows/view/{{show.id}}">View</a> {% if request.session.logged_in %}|
+                        <a href="/shows/view/{{show.id}}">View</a> |
                         <a href="/shows/edit/{{show.id}}">Edit</a> |
-                        <a href="/shows/delete/{{show.id}}">Delete</a>{% endif %}
+                        <a href="/shows/watchlist/remove/{{show.id}}">Remove</a> |
+                        <a href="/shows/delete/{{show.id}}">Delete</a>
                     </td>
                 </tr>
                 {% endfor %}

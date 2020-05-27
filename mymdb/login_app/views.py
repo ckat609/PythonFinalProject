@@ -2,6 +2,7 @@ from django.shortcuts import render, HttpResponse, redirect
 from django.contrib import messages
 from datetime import datetime, date
 from login_app.models import User
+from shows_app.models import Wlist
 import bcrypt
 
 
@@ -42,13 +43,14 @@ def user_reg(request):
         password = request.POST['password']
         pw_hash = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
 
-        User.objects.create(first_name=request.POST['first_name'], last_name=request.POST['last_name'], birthday=request.POST['birthday'], email=request.POST['email'], password=pw_hash)
+        new_user = User.objects.create(first_name=request.POST['first_name'], last_name=request.POST['last_name'], birthday=request.POST['birthday'], email=request.POST['email'], password=pw_hash)
         aUser = User.objects.filter(email=request.POST['email'])
 
         request.session['id'] = aUser[0].id
         request.session['user'] = aUser[0].email
         request.session['success'] = True
 
+        Wlist.objects.create(list_name=f"{new_user.first_name}'s Watch List", user=new_user)
         return redirect('/user/reg/success')
 
 

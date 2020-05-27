@@ -40,8 +40,8 @@
             </div>
             <div class="form-group row">
                 <div class="col">
-                    <input type="radio" name="medium" value="movie" required> Movie
-                    <input type="radio" name="medium" value="show" required> Show
+                    <input type="radio" name="medium" value="Movie" {% if show.medium == 'Movie' %}checked{%endif%} required> Movie
+                    <input type="radio" name="medium" value="Show" {% if show.medium == 'Show' %}checked{%endif%} required> Show
                 </div>
             </div>
             <div class="form-group row">
@@ -56,25 +56,28 @@
                 </div>
             </div>
             <div class="form-group row">
-                <div class="col">
-                    <label for="show-network">Genre</label>
-                    <select class="form-control" id="genre" name="genre">
-                        {% for network in networks %}
-                        <option {% if network.id == networkSelected %} selected="selected" {% endif %} value="{{network.id}}">{{network.name}}</option>
-                        {% endfor %}
-                    </select>
-                </div>
                 <div class=" col">
-                    <label for="runtime">Runtime</label>
-                    <input type="text" class="form-control" id="runtime" name="runtime" {% if runtime %}value="{{runtime}}" {% endif %}>
+                    <label for="runtime">Runtime(mins)</label>
+                    <input type="text" class="form-control" id="runtime" name="runtime" value="{% if runtime %}{{runtime}}{% else %}{{ show.runtime }}{% endif %}">
                 </div>
                 <div class=" col">
                     <label for="seasons">Seasons</label>
-                    <input type="text" class="form-control" id="seasons" name="seasons" {% if seasons %}value="{{seasons}}" {% endif %}>
+                    <input type="text" class="form-control" id="seasons" name="seasons" value="{% if seasons %}{{seasons}}{% else %}{{ show.total_seasons }}{% endif %}">
                 </div>
                 <div class=" col">
                     <label for="episodes">Episodes</label>
-                    <input type="text" class="form-control" id="episodes" name="episodes" {% if episodes %}value="{{episodes}}" {% endif %}>
+                    <input type="text" class="form-control" id="episodes" name="episodes" value="{% if episodes %}{{episodes}}{% else %}{{ show.total_episodes }}{% endif %}">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col">
+                    <label class="form-check-label" for="show-genre">Genre:</label>
+                    {% for genre in genres %}
+                    <div class="form-group form-check-inline">
+                        <input class="form-check-input" type="checkbox" name="genre{{genre.id}}" id="genre{{genre.id}}" value="{{genre.id}}" {% if genre in show.genre.all %}checked{%endif%}>
+                        <label class="form-check-label" for="genre{{genre.id}}">{{genre.name}}</label>
+                    </div>
+                    {% endfor %}
                 </div>
             </div>
             <div class="form-group row">

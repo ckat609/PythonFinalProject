@@ -73,6 +73,14 @@ class Show(models.Model):
     objects = ShowManager()
 
 
+class Wlist(models.Model):
+    list_name = models.CharField(max_length=255)
+    user = models.OneToOneField(User, related_name="watchlist", on_delete=models.CASCADE)
+    show = models.ManyToManyField(Show, related_name="watchlist")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
 class Review(models.Model):
     user = models.ForeignKey(User, related_name="reviews", on_delete=models.CASCADE, null=True)
     show = models.ForeignKey(Show, related_name="reviews", on_delete=models.CASCADE, null=True)
