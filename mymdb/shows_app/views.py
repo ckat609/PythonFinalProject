@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, HttpResponse
 from shows_app.models import *
 from django.utils import timezone
 from django.contrib import messages
+from django.db.models import Avg, Max, Min, Sum
 from datetime import datetime
 from .models import User
 
@@ -13,18 +14,21 @@ def index(request):
 
 def show_list(request):
     context = {
-        'shows': Show.objects.all().order_by('title')
+        'shows': Show.objects.all().order_by('title'),
     }
     return render(request, 'show_list.html', context)
 
 
 def show_view(request, show_num):
+    stars = Review.objects.filter(show=Show.objects.get(id=show_num)).aggregate(Avg('score'))['score__avg'] if Review.objects.filter(
+        show=Show.objects.get(id=show_num)).aggregate(Avg('score'))['score__avg'] else 0
     context = {
         'show': Show.objects.get(id=show_num),
+        'reviews': Review.objects.filter(show=Show.objects.get(id=show_num)),
+        'intStars': round(stars),
+        'stars': round(stars, 2),
     }
-    print("*"*55)
-    print(context['show'].genre)
-    print("*"*55)
+
     return render(request, 'show_view.html', context)
 
 
@@ -294,7 +298,8 @@ def review_add_db(request):
     if('logged_in' not in request.session):
         return redirect("/getout")
 
-    Review.objects.create(title=request.POST['review_title'], review=request.POST['review_text'], score=request.POST['review_score'])
+    Review.objects.create(user=User.objects.get(id=request.session['user_id']), show=Show.objects.get(id=request.POST['show_id']),
+                          title=request.POST['review_title'], review=request.POST['review_text'], score=request.POST['review_score'])
     return redirect(f"/shows/view/{request.POST['show_id']}")
 
 
