@@ -1,7 +1,4 @@
-* {
-    /* background-color: red; */
-    /* outline: 0px solid red; */
-}
+* {}
 
 .wrapper {
     width: 970px;
@@ -24,4 +21,21 @@
 
 .messages {
     color: red;
+}
+
+.star-sm {
+    width: 20px;
+}
+
+.star-lg {
+    width: 25px;
+}
+
+.text-no-wrap {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+    width: 100%;
+    min-width: 1px;
 }

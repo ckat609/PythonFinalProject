@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/shows_style.css' %}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
         crossorigin="anonymous">
 
@@ -49,9 +49,11 @@
                     </td>
                     <td>{{show.runtime}}</td>
                     <td>
-                        <a href="/shows/view/{{show.id}}">View</a> {% if request.session.logged_in %}|
-                        <a href="/shows/edit/{{show.id}}">Edit</a> |
-                        <a href="/shows/delete/{{show.id}}">Delete</a>{% endif %}
+                        <span class="text-no-wrap">
+                            <a href="/shows/view/{{show.id}}">View</a> {% if request.session.logged_in %}|
+                            <a href="/shows/edit/{{show.id}}">Edit</a> |
+                            <a href="/shows/delete/{{show.id}}">Delete</a>{% endif %}
+                        </span>
                     </td>
                 </tr>
                 {% endfor %}
