@@ -15,6 +15,10 @@
     width: 300px;
 }
 
+.img-avatar {
+    width: 300px;
+}
+
 
 .quotes {
     font-style: oblique;
@@ -27,4 +31,25 @@
 
 .btn-width {
     width: 150px;
+}
+
+.mini-poster {
+    width: 73px;
+    height: 110px;
+}
+
+.img-thumbnail {
+    display: inline-block;
+}
+
+.w-100 {
+    width: 50px;
+}
+
+.star-sm {
+    width: 20px;
+}
+
+.preformatted {
+    white-space: pre-line;
 }

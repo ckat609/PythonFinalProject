@@ -1,0 +1,12 @@
+profile page
+- Name
+- Birthday
+- Date joined
+- Total reviews
+- Profile image
+------------------------
+Watchlist (10 shows)
+Latest reviews (5)
+
+
+landing page

@@ -1,4 +1,7 @@
-* {}
+* {
+    outline: 0px solid red;
+
+}
 
 .wrapper {
     width: 970px;
@@ -38,4 +41,9 @@
     display: block;
     width: 100%;
     min-width: 1px;
+}
+
+
+.preformatted {
+    white-space: pre-line;
 }

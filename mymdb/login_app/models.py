@@ -1,6 +1,8 @@
 from django.db import models
 import re
 from datetime import datetime, date
+import urllib.request
+import os
 
 
 def years_ago(years, from_date=None):
@@ -48,7 +50,26 @@ class User(models.Model):
     last_name = models.CharField(max_length=255)
     email = models.CharField(max_length=255)
     birthday = models.DateField(null=True)
+    image = models.TextField(null=True)
+    photo = models.FileField(upload_to=f"avatars/", blank=True)
     password = models.CharField(max_length=128)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now_add=True)
     objects = UserManager()
+
+    def cache(self):
+        """Store image locally if we have a URL"""
+
+        # if self.image and not self.photo:
+        result = urllib.request.urlretrieve(self.image)
+        if (self.image[-4:] == ".jpeg"):
+            fileExtension = ".jpg"
+        elif (self.image[-4:] != ".jpg" or self.image[-4:] != ".png"):
+            fileExtension = ".jpg"
+        else:
+            fileExtension = self.image[-4:]
+        self.photo.save(
+            os.path.basename(f"{self.id}_avatar{fileExtension}"),
+            open(result[0], 'rb')
+        )
+        self.save()

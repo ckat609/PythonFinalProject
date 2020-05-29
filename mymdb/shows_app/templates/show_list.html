@@ -50,9 +50,14 @@
                     <td>{{show.runtime}}</td>
                     <td>
                         <span class="text-no-wrap">
-                            <a href="/shows/view/{{show.id}}">View</a> {% if request.session.logged_in %}|
-                            <a href="/shows/edit/{{show.id}}">Edit</a> |
-                            <a href="/shows/delete/{{show.id}}">Delete</a>{% endif %}
+                            <a href="/shows/view/{{show.id}}">View</a>
+                            {% if this_user == show.user %}
+                            | <a href="/shows/edit/{{show.id}}">Edit</a>
+                            | <a href="/shows/delete/{{show.id}}">Delete</a>
+                            {% endif %}
+                            {% if show not in user_list %}
+                            | <a href="/shows/watchlist/add/{{show.id}}">Add to Watchlist</a>
+                            {% endif %}
                         </span>
                     </td>
                 </tr>

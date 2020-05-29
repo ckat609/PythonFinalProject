@@ -49,10 +49,14 @@
                     </td>
                     <td>{{show.runtime}}</td>
                     <td>
-                        <a href="/shows/view/{{show.id}}">View</a> |
-                        <a href="/shows/edit/{{show.id}}">Edit</a> |
-                        <a href="/shows/watchlist/remove/{{show.id}}">Remove</a> |
-                        <a href="/shows/delete/{{show.id}}">Delete</a>
+                        <span class="text-no-wrap">
+                            <a href="/shows/view/{{show.id}}">View</a> |
+                            <a href="/shows/watchlist/remove/{{show.id}}">Remove</a>
+                            {% if this_user == show.user %}
+                            | <a href="/shows/edit/{{show.id}}">Edit</a> |
+                            <a href="/shows/delete/{{show.id}}">Delete</a>
+                            {% endif %}
+                        </span>
                     </td>
                 </tr>
                 {% endfor %}

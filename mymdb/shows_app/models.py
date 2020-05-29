@@ -1,6 +1,8 @@
 from django.db import models
 from datetime import datetime
 from login_app.models import User
+import urllib.request
+import os
 
 # Create your models here.
 
@@ -11,8 +13,8 @@ class ShowManager(models.Manager):
 
         if(len(postData['title']) == 0):
             errors['title'] = "Show title must contain at least one character."
-        if(len(postData['image']) == 0):
-            errors['image'] = "Image path must be included."
+        # if(len(postData['image']) == 0):
+        #     errors['image'] = "Image path must be included."
 
         return errors
 
@@ -67,10 +69,28 @@ class Show(models.Model):
     release_date = models.DateField(null=True)
     description = models.TextField(null=True)
     image = models.TextField(null=True)
+    photo = models.FileField(upload_to=f"posters/", blank=True)
     network = models.ForeignKey(Network, related_name="shows", on_delete=models.CASCADE, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now_add=True)
     objects = ShowManager()
+
+    def cache(self):
+        """Store image locally if we have a URL"""
+
+        # if self.image and not self.photo:
+        result = urllib.request.urlretrieve(self.image)
+        if (self.image[-4:] == ".jpeg"):
+            fileExtension = ".jpg"
+        elif (self.image[-4:] != ".jpg" or self.image[-4:] != ".png"):
+            fileExtension = ".jpg"
+        else:
+            fileExtension = self.image[-4:]
+        self.photo.save(
+            os.path.basename(f"{self.id}_poster{fileExtension}"),
+            open(result[0], 'rb')
+        )
+        self.save()
 
 
 class Wlist(models.Model):
