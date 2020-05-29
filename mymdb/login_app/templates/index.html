@@ -14,11 +14,13 @@
 
 <body>
     <div class="container">
-        <div id="js_navmenu">
-            {%if request.session.logged_in%}
-            <a href='/user/logout'>LOGOUT</a>
-            {%endif%}
-        </div>
+        <nav class='navbar navbar-expand-lg navbar-dark bg-dark'>
+            <a class='navbar-brand' href='/'><span class="navbar-brand mb-0 h1 btn btn-warning text-dark">myMDB</span></a>
+            <button class='navbar-toggler' type='button' data-toggle='collapse' data-target='#navbarSupportedContent' aria-controls='navbarSupportedContent' aria-expanded='false'
+                aria-label='Toggle navigation'>
+                <span class='navbar-toggler-icon'></span>
+            </button>
+        </nav>
         <div class="jumbotron">
             <div class="row">
                 <div class="col">
@@ -43,7 +45,7 @@
                         <li>Django</li>
                     </ul>
                     <hr>
-                    <p>Available users (the password for all is 'helloworld'):</p>
+                    <p>Available users (the password for all of them is 'helloworld'):</p>
                     <ul>
                         <li>armando@gmail.com</li>
                         <li>dthompson@gmail.com</li>
