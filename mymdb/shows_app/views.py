@@ -13,7 +13,11 @@ def index(request):
 
 
 def show_list(request):
+    logged_in_user = User.objects.get(id=request.session['user_id'])
+    this_list = Wlist.objects.get(user_id=request.session['user_id'])
     context = {
+        'this_user': logged_in_user,
+        'user_list': Show.objects.filter(watchlist=this_list),
         'shows': Show.objects.all().order_by('title'),
     }
     return render(request, 'show_list.html', context)
@@ -22,13 +26,19 @@ def show_list(request):
 def show_view(request, show_num):
     stars = Review.objects.filter(show=Show.objects.get(id=show_num)).aggregate(Avg('score'))['score__avg'] if Review.objects.filter(
         show=Show.objects.get(id=show_num)).aggregate(Avg('score'))['score__avg'] else 0
+    this_list = Wlist.objects.get(user_id=request.session['user_id'])
+    logged_in_user = User.objects.get(id=request.session['user_id'])
     context = {
+        'this_user': logged_in_user,
+        'user_list': Show.objects.filter(watchlist=this_list),
         'show': Show.objects.get(id=show_num),
         'reviews': Review.objects.filter(show=Show.objects.get(id=show_num)),
         'intStars': round(stars),
         'stars': round(stars, 2),
     }
-
+    print("*"*50)
+    print(Show.objects.get(id=show_num).photo)
+    print("*"*50)
     return render(request, 'show_view.html', context)
 
 
@@ -88,6 +98,7 @@ def show_add_db(request):
                                             total_episodes=int(request.POST['episodes']) if request.POST['episodes'] else 0)
 
         # print(request.POST)
+        lastShowAdded.cache()
         # lastShowAdded = Show.objects.last()
         for genre in Genre.objects.all():
             if (f"genre{genre.id}" in request.POST):
@@ -130,6 +141,7 @@ def show_edit_db(request):
         aShow.network = Network.objects.get(id=request.POST['network'])
         aShow.modified_at = datetime.now()
         aShow.save()
+        aShow.cache()
 
         for genre in Genre.objects.all():
             if (f"genre{genre.id}" in request.POST):

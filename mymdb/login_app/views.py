@@ -2,8 +2,10 @@ from django.shortcuts import render, HttpResponse, redirect
 from django.contrib import messages
 from datetime import datetime, date
 from login_app.models import User
-from shows_app.models import Wlist
+from shows_app.models import Wlist, Show, Network, Genre, Review
 import bcrypt
+import random
+from random import sample
 
 
 def index(request):
@@ -24,9 +26,6 @@ def user_reg(request):
         postData[key] = value
 
     postData['email_exists'] = True if emailExists else False
-    print("*"*50)
-    print(postData['email_exists'])
-    print("*"*50)
     errors = User.objects.basic_validator(postData)
 
     if(len(errors) > 0):
@@ -86,11 +85,32 @@ def user_login_success(request):
         return redirect("/getout")
 
     user = User.objects.get(id=request.session['user_id'])
+    this_list = Wlist.objects.get(user=user)
+    if(user.photo):
+        request.session['avatar'] = user.photo.name
+    else:
+        request.session['avatar'] = "avatars/00_avatar.png"
+    countShow = 12
+    countAllMYShows = this_list.show.all().count()
+    countMaxShows = countAllMYShows if countAllMYShows < countShow else countShow
 
+    aList = []
+    for i in this_list.show.all():
+        aList.append(i.id)
+    random.shuffle(aList)
+
+    # rand_ids = sample(range(1, countAllMYShows+1), countMaxShows)
+    random_shows = Show.objects.filter(id__in=aList[:countMaxShows])
+
+    print("*"*50)
+    print("USER LOGIN SUCCESS")
+    print(request.session['avatar'])
+    print(aList)
+    print("*"*50)
     context = {
-        'uid': user.id,
-        'first_name': user.first_name,
-        'last_name': user.last_name,
+        'user': user,
+        'watchlist': random_shows,
+        'user_reviews': Review.objects.filter(user=user),
     }
     return render(request, "user_login_success.html", context)
 
@@ -99,6 +119,14 @@ def user_logout(request):
     request.session['logged_in'] = False
     request.session.clear()
     return redirect("/")
+
+
+def avatar_add_db(request):
+    user = User.objects.get(id=request.session['user_id'])
+    user.image = request.POST['image']
+    user.save()
+    user.cache()
+    return redirect("/user/login/success")
 
 
 def getout(request):

@@ -9,7 +9,11 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
         crossorigin="anonymous">
-    <title>Favorite Quotes</title>
+    <title>User Profile</title>
+    <style>
+
+    </style>
+
 </head>
 
 <body>
@@ -20,18 +24,73 @@
             {%endif%}
         </div>
         <div class="jumbotron">
-            <h1 class="display-4">Welcome back, {{first_name}}!</h1>
-            <p class="lead">Add shows to the list!</p>
-            <hr class="my-4">
-            <a href="/shows/watchlist/view">Go To My Watchlist</a>
-        </div>
-        <div class="row">
-            <div class="col">
+            <div class="media row">
+                <div id="profile-image" class="col col-md-auto">
+                    <img src="/media/{{request.session.avatar}}" class="img-thumbnail img-avatar" alt="...">
+                    <p>
+                        <a class="" data-toggle="collapse" href="#image-upload" role="button" aria-expanded="false" aria-controls="collapseExample">
+                            Edit profile image
+                        </a>
+                    </p>
+                    <div class="collapse" id="image-upload" class="form-group row mb-1">
+                        <div class="form-group">
+                            <form action="/user/avatar/add" method="post" class="w-100">
+                                {%csrf_token%}
+                                <label for="show-image">Image URL</label>
+                                <input type="text" class="w-100 form-control" id="show-image" name="image" value="{% if image %}{{image}}{% else %}{{show.image}}{% endif %}">
 
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Change avatar</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="collapse" id="image-upload" class="form-group">
+                    </div>
+
+                </div>
+                <div class="media-body col">
+                    <h2 class="mt-0">{{user.first_name}} {{user.last_name}}</h2>
+                    <hr class="my-2">
+                    <p>Birthday: {{user.birthday}}</p>
+                    <p>Date Joined: {{user.created_at}}</p>
+                    <p>Total Reviews: {{user_reviews.count}}</p>
+                    <a href="/shows/watchlist/view">Go To My Watchlist</a>
+                </div>
+            </div>
+            <h6 class="display-6 mt-5">TITLES IN {{user.first_name | upper}}'S WATCHLIST</h6>
+            <hr class="my-2">
+            {% for show in watchlist %}
+            <div class="img-thumbnail">
+                <a href="/shows/view/{{show.id}}"><img src="/media/{{show.photo}}" class="mini-poster" alt="poster-img"></a>
+            </div>
+            {% endfor %}
+            <hr class="my-2">
+        </div>
+        <h2>{{user.first_name | upper}}'S REVIEWS</h2>
+        <hr class="my-2">
+        {% for review in user_reviews %}
+        <div id="view_review" class="row">
+            <div class="col">
+                <h3>{{ review.show.title }}
+                    {% for i in "x"|ljust:review.score %}
+                    <span><img src="{% static 'img/star.png' %}" alt="star" class="star-sm"></span>
+                    {% endfor %}
+                </h3>
+                <h6>Reviewed on {{review.created_at}}</h6>
+                <h5>{{review.title}}</h5>
+                <p>{{review.review}}</p>
+                <hr class="my-2">
             </div>
         </div>
+        {% endfor %}
+    </div>
     </div>
 </body>
 <script src="{% static 'js/header.js' %}"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
+</script>
 
 </html>

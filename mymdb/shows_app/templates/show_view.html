@@ -27,8 +27,8 @@
             <table>
                 <tr>
                     <td class="align-top">
-                        <div class="">
-                            <img src="{{show.image}}" class="show-poster" alt="poster-img">
+                        <div class="img-thumbnail">
+                            <img src="/media/{{show.photo}}" class="show-poster" alt="poster-img">
                         </div>
                     </td>
                     <td class="show-info">
@@ -77,9 +77,51 @@
                         {% if request.session.logged_in %}
                         <div>
                             <a href="/shows/edit/{{show.id}}" class="btn btn-primary">Edit</a>
-                            <span onclick="showAddReview({{show.id}})" class="btn btn-primary">Add Review</span>
+                            <button class=" btn btn-primary" type="button" data-toggle="collapse" data-target="#showreview" aria-expanded="false" aria-controls="collapseExample">
+                                Review
+                            </button>
+                            {% if show not in user_list %}
                             <a href="/shows/watchlist/add/{{show.id}}" class="btn btn-primary">Add to Watchlist</a>
+                            {% endif %}
+                            {% if this_user == show.user %}
                             <a href="/shows/delete/{{show.id}}" class="btn btn-danger float-right">DELETE</a>
+                            {% endif %}
+
+                            <div class="collapse" id="showreview" class="form-group row">
+                                <div class=" col col-md-auto">
+                                    <hr>
+                                    <h3>Write a review</h3>
+                                    <form action="/shows/review/add" method="post">
+                                        {%csrf_token%}
+                                        <div class="form-group">
+                                            <input type="hidden" name="show_id" value='{{show.id}}'>
+                                            <label for="review_title">Title</label>
+                                            <input type="text" name="review_title" id="review_title" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="review_score">Score</label>
+                                            <select class="form-control" id="review_score" name="review_score">
+                                                <option>1</option>
+                                                <option>2</option>
+                                                <option>3</option>
+                                                <option>4</option>
+                                                <option selected>5</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="review_text">Review</label>
+                                            <pre>
+                                            <textarea name="review_text" id="" cols="30" rows="5" class="form-control"></textarea>
+                                            </pre>
+                                        </div>
+                                        <div class="form-group">
+                                            <button type="submit" class="btn btn-primary">Add</button>
+                                            <button class=" btn btn-danger" type="button" data-toggle="collapse" data-target="#showreview" aria-expanded="false"
+                                                aria-controls="collapseExample">Cancel</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                         {%endif%}
                     </td>
@@ -87,9 +129,9 @@
             </table>
         </div>
         {% if request.session.logged_in %}
-        <div id="add_review" class="row">
-            {% csrf_token %}
-        </div>
+
+
+
         {%endif%}
         {% for review in reviews %}
         <div id="view_review" class="row">
@@ -101,13 +143,18 @@
                 <span><img src="{% static 'img/star.png' %}" alt="star" class="star-sm"></span>
                 {% endfor %}
 
-                <p>{{review.review}}</p>
+                <p class="preformatted">
+                    {{review.review}}
+                </p>
             </div>
         </div>
         {% endfor %}
     </div>
 </body>
 <script src="{% static 'js/header.js' %}"></script>
-<script src="{% static 'js/review.js' %}"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
+</script>
 
 </html>
