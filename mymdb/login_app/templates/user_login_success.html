@@ -38,7 +38,7 @@
                             <form action="/user/avatar/add" method="post" class="w-100">
                                 {%csrf_token%}
                                 <label for="show-image">Image URL</label>
-                                <input type="text" class="w-100 form-control" id="show-image" name="image" value="{% if image %}{{image}}{% else %}{{show.image}}{% endif %}">
+                                <input type="text" class="w-100 form-control" id="show-image" name="image" value="{% if image %}{{image}}{% else %}{{show.image}}{% endif %}" required>
 
                         </div>
                         <div class="form-group">
