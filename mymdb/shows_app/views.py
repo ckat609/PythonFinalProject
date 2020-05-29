@@ -40,9 +40,6 @@ def show_view(request, show_num):
         'intStars': round(stars),
         'stars': round(stars, 2),
     }
-    print("*"*50)
-    print(Show.objects.get(id=show_num).photo)
-    print("*"*50)
     return render(request, 'show_view.html', context)
 
 

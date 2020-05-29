@@ -16,10 +16,6 @@ def index(request):
         }
         return render(request, "index.html", context)
     else:
-        # request.session['available_users'] = User.objects
-        print("*"*50)
-        # print(request.session['available_users'])
-        print("*"*50)
         return redirect("/user/login/success")
 
 
@@ -75,13 +71,12 @@ def user_registration_success(request):
 
 
 def user_login(request):
-    if request.POST['email'] == "" or request.POST['password'] == "":
+    user = User.objects.filter(email=request.POST['email'])
+    if request.POST['email'] == "" or request.POST['password'] == "" or len(user) == 0:
         return redirect("/getout")
-    user = User.objects.get(email=request.POST['email'])
-
-    if(bcrypt.checkpw(request.POST['password'].encode(), user.password.encode())):
-        request.session['user_id'] = user.id
-        request.session['user'] = user.email
+    if(bcrypt.checkpw(request.POST['password'].encode(), user[0].password.encode())):
+        request.session['user_id'] = user[0].id
+        request.session['user'] = user[0].email
         request.session['logged_in'] = True
         return redirect("/user/login/success")
     else:
