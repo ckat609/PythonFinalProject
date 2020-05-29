@@ -3,16 +3,24 @@ from django.contrib import messages
 from datetime import datetime, date
 from login_app.models import User
 from shows_app.models import Wlist, Show, Network, Genre, Review
+from django.db.models import Avg, Max, Min, Sum, Count
 import bcrypt
 import random
 from random import sample
 
 
 def index(request):
-    context = {
-        'default_date': datetime.now().strftime("%Y-%m-%d")
-    }
-    return render(request, "index.html", context)
+    if('logged_in' not in request.session):
+        context = {
+            'default_date': datetime.now().strftime("%Y-%m-%d")
+        }
+        return render(request, "index.html", context)
+    else:
+        # request.session['available_users'] = User.objects
+        print("*"*50)
+        # print(request.session['available_users'])
+        print("*"*50)
+        return redirect("/user/login/success")
 
 
 def user_reg(request):
@@ -86,6 +94,9 @@ def user_login_success(request):
 
     user = User.objects.get(id=request.session['user_id'])
     this_list = Wlist.objects.get(user=user)
+
+
+# Sets the amount of movies/shows to be displayed in the watchlist
     if(user.photo):
         request.session['avatar'] = user.photo.name
     else:
@@ -94,24 +105,25 @@ def user_login_success(request):
     countAllMYShows = this_list.show.all().count()
     countMaxShows = countAllMYShows if countAllMYShows < countShow else countShow
 
+# Gets a list of 'random' shows in the user's watchlist
     aList = []
     for i in this_list.show.all():
         aList.append(i.id)
     random.shuffle(aList)
-
-    # rand_ids = sample(range(1, countAllMYShows+1), countMaxShows)
     random_shows = Show.objects.filter(id__in=aList[:countMaxShows])
 
-    print("*"*50)
-    print("USER LOGIN SUCCESS")
-    print(request.session['avatar'])
-    print(aList)
-    print("*"*50)
+# Gets the movies/shows with the most starts
+    reviews = Review.objects.all().values('show_id').annotate(total=Sum('score')).order_by('-total')[0:10]
+    popularList = []
+    for review in reviews.all():
+        popularList.append(review['show_id'])
     context = {
         'user': user,
         'watchlist': random_shows,
-        'user_reviews': Review.objects.filter(user=user),
+        'user_reviews': Review.objects.filter(user=user).all().order_by('-created_at')[0:3],
+        'popular_shows': Show.objects.filter(id__in=popularList).annotate(avg=Avg('reviews__score')).annotate(total=Sum('reviews__score')).annotate(count=Count('reviews__score')).order_by('-reviews__show_id').order_by('-total'),
     }
+    print(context['popular_shows'])
     return render(request, "user_login_success.html", context)
 
 

@@ -13,6 +13,8 @@ def index(request):
 
 
 def show_list(request):
+    if('logged_in' not in request.session):
+        return redirect("/getout")
     logged_in_user = User.objects.get(id=request.session['user_id'])
     this_list = Wlist.objects.get(user_id=request.session['user_id'])
     context = {
@@ -24,6 +26,8 @@ def show_list(request):
 
 
 def show_view(request, show_num):
+    if('logged_in' not in request.session):
+        return redirect("/getout")
     stars = Review.objects.filter(show=Show.objects.get(id=show_num)).aggregate(Avg('score'))['score__avg'] if Review.objects.filter(
         show=Show.objects.get(id=show_num)).aggregate(Avg('score'))['score__avg'] else 0
     this_list = Wlist.objects.get(user_id=request.session['user_id'])
@@ -32,7 +36,7 @@ def show_view(request, show_num):
         'this_user': logged_in_user,
         'user_list': Show.objects.filter(watchlist=this_list),
         'show': Show.objects.get(id=show_num),
-        'reviews': Review.objects.filter(show=Show.objects.get(id=show_num)),
+        'reviews': Review.objects.filter(show=Show.objects.get(id=show_num)).all().order_by('-created_at'),
         'intStars': round(stars),
         'stars': round(stars, 2),
     }
@@ -66,6 +70,8 @@ def show_edit(request, show_num):
 
 
 def show_add_db(request):
+    if('logged_in' not in request.session):
+        return redirect("/getout")
     errors = Show.objects.basicValidator(request.POST)
     if(len(errors) > 0):
         for key, value in errors.items():
@@ -107,6 +113,8 @@ def show_add_db(request):
 
 
 def show_edit_db(request):
+    if('logged_in' not in request.session):
+        return redirect("/getout")
     errors = Show.objects.basicValidator(request.POST)
     if (len(errors) > 0):
         for kay, value in errors.items():
@@ -152,11 +160,15 @@ def show_edit_db(request):
 
 
 def show_delete_db(request, show_num):
+    if('logged_in' not in request.session):
+        return redirect("/getout")
     Show.objects.get(id=show_num).delete()
     return redirect(f"/shows/list")
 
 
 def network_list(request):
+    if('logged_in' not in request.session):
+        return redirect("/getout")
     context = {
         'networks': Network.objects.all().order_by('name')
     }
@@ -171,6 +183,8 @@ def network_add(request):
 
 
 def network_add_db(request):
+    if('logged_in' not in request.session):
+        return redirect("/getout")
     errors = Show.objects.basicValidator(request.POST)
     if(len(errors) > 0):
         for key, value in errors.items():
@@ -188,6 +202,8 @@ def network_add_db(request):
 def network_edit(request, network_num):
     if('logged_in' not in request.session):
         return redirect("/getout")
+    if('logged_in' not in request.session):
+        return redirect("/getout")
     context = {
         'network': Network.objects.get(id=network_num),
     }
@@ -195,6 +211,8 @@ def network_edit(request, network_num):
 
 
 def network_edit_db(request):
+    if('logged_in' not in request.session):
+        return redirect("/getout")
     errors = Network.objects.basicValidator(request.POST)
     if (len(errors) > 0):
         for kay, value in errors.items():
@@ -215,11 +233,15 @@ def network_edit_db(request):
 
 
 def network_delete_db(request, network_num):
+    if('logged_in' not in request.session):
+        return redirect("/getout")
     Network.objects.get(id=network_num).delete()
     return redirect(f"/shows/network/list")
 
 
 def genre_list(request):
+    if('logged_in' not in request.session):
+        return redirect("/getout")
     context = {
         'genres': Genre.objects.all().order_by('name')
     }
@@ -229,11 +251,15 @@ def genre_list(request):
 def genre_add(request):
     if('logged_in' not in request.session):
         return redirect("/getout")
+    if('logged_in' not in request.session):
+        return redirect("/getout")
 
     return render(request, 'genre_add.html')
 
 
 def genre_add_db(request):
+    if('logged_in' not in request.session):
+        return redirect("/getout")
     errors = Genre.objects.basicValidator(request.POST)
     if(len(errors) > 0):
         for key, value in errors.items():
@@ -257,6 +283,8 @@ def genre_edit(request, genre_num):
 
 
 def genre_edit_db(request):
+    if('logged_in' not in request.session):
+        return redirect("/getout")
     errors = Genre.objects.basicValidator(request.POST)
     if (len(errors) > 0):
         for kay, value in errors.items():
@@ -280,16 +308,20 @@ def genre_delete_db(request, genre_num):
 
 
 def watchlist_view(request):
+    if('logged_in' not in request.session):
+        return redirect("/getout")
     logged_in_user = User.objects.get(id=request.session['user_id'])
-    this_list = Wlist.objects.get(user_id=request.session['user_id'])
+    this_list = Wlist.objects.get(user=User.objects.get(id=request.session['user_id']))
     context = {
         'this_user': logged_in_user,
-        'watchlist': Show.objects.filter(watchlist=this_list),
+        'watchlist': Show.objects.filter(watchlist=this_list).order_by('title'),
     }
     return render(request, 'watchlist.html', context)
 
 
 def watchlist_add(request, show_num):
+    if('logged_in' not in request.session):
+        return redirect("/getout")
     logged_in_user = User.objects.get(id=request.session['user_id'])
     show_to_add = Show.objects.get(id=show_num)
     User.objects.get(id=request.session['user_id']).watchlist.show.add(show_to_add)
@@ -302,6 +334,8 @@ def watchlist_add(request, show_num):
 
 
 def watchlist_remove(request, show_num):
+    if('logged_in' not in request.session):
+        return redirect("/getout")
     User.objects.get(id=request.session['user_id']).watchlist.show.remove(Show.objects.get(id=show_num))
     return redirect('/shows/watchlist/view')
 

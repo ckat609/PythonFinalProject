@@ -53,3 +53,19 @@
 .preformatted {
     white-space: pre-line;
 }
+
+.welcome {
+    background-image: url("/media/img/welcome.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding: 0;
+    margin: 0;
+}
+
+.hazy {
+    border: 1px solid lightgrey;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, .25);
+    border-radius: 10px;
+    margin: 10px;
+    background-color: rgba(255, 255, 255, .95);
+}
